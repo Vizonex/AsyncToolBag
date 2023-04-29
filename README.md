@@ -4,7 +4,8 @@ Another Library for handing asynchronous code.
 
 # Inspiration for this library 
 Inspired by the amazing aiomultiprocess library , I had decided to go out and tackle the remaining parts and things that I wanted to implement 
-You will find this library to come very handy with heavier coroutines that require moderation on the concurrency. 
+You will find this library to come very handy with heavier coroutines that require moderation on the concurrency but maybe you lack cores 
+that can be used. 
 
 In my inspiration with all the different Pool Executors I have came up with the `AsyncPoolExecutor` used to acting more like the `ThreadPoolExecutor`
 There are still a couple of things still left to do before I can make this into a python library but here is the gist of what I have for this concept.
@@ -75,3 +76,5 @@ async def test_main():
 if __name__ == "__main__":
      asyncio.run(test_main())
 ```
+There's still some more objects that I've added and licensing will need to be done but I am very excied for what people will implement with these things avalible..
+
