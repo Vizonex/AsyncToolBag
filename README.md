@@ -6,7 +6,7 @@ Another Library for handing asynchronous code.
 Inspired by the amazing aiomultiprocess library , I had decided to go out and tackle the remaining parts and things that I wanted to implement 
 You will find this library to come very handy with heavier coroutines that require moderation on the concurrency. 
 
-In my inspiration with all the different Pool Executors I have came up with the `AsyncPoolExecutor` 
+In my inspiration with all the different Pool Executors I have came up with the `AsyncPoolExecutor` used to acting more like the `ThreadPoolExecutor`
 There are still a couple of things still left to do before I can make this into a python library but here is the gist of what I have for this concept.
 
 ```python
@@ -35,4 +35,43 @@ class ManyPoolResults(AsyncIterator[RET], Awaitable[Sequence[RET]]):
         self.iters = azip(iters)
         self.queue: AsyncQueueType[asyncio.Task[RET]] = asyncio.Queue()
         self.dummyqueue: AsyncQueueType[None] = asyncio.Queue(concurrency)
+```
+
+Another Idea I had was an `amap` object that could have the ability to handel coroutine objects as well as different iterators both sync and async. 
+This is a little bit like the aioitertools library but it is instead wrapped to around class object and can be both awaited and iterated over 
+
+```python 
+
+async def do_work(b:int):
+    await asyncio.sleep(b)
+    return b 
+
+async def do_main():
+    data = [1 , 2 ,3 , 4]
+    async for result in amap(do_work,data):
+        print(f"slept for {result} seconds...")
         
+# you could also await it to end up returning all the data as a :class:`list` if need be
+# since you cannot use list(amap()) normally...
+
+async def do_main():
+    data = [1 , 2 ,3 , 4]
+    results = await amap(do_work, data)
+    
+# amaps can be chained as well sort of like a list comphrehension
+
+async def longlistcomp():
+   return await amap(do_data, amap(read_data,[1,2,3,4,5]))
+```
+
+one of my favroite objects I did recently was a helper for 3.9 python users that id like to call the `azip` function (this is also a class object)
+It can also handle both async and synchronous iterables. 
+```python
+async def test_main():
+    tests = ["ABC", (1,2,3), "XYZ"]
+    async for a in azip(tests):
+        print(a)
+
+if __name__ == "__main__":
+     asyncio.run(test_main())
+```
